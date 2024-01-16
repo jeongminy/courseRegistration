@@ -3,9 +3,9 @@ package com.teamsparta.courseregistration.domain.course.service
 import com.teamsparta.courseregistration.domain.course.dto.CourseResponse
 import com.teamsparta.courseregistration.domain.course.dto.CreateCourseRequest
 import com.teamsparta.courseregistration.domain.course.dto.UpdateCourseRequest
-import com.teamsparta.courseregistration.domain.courseapplication.dto.ApplyCourseRequest
-import com.teamsparta.courseregistration.domain.courseapplication.dto.CourseApplicationResponse
-import com.teamsparta.courseregistration.domain.courseapplication.dto.UpdateApplicationStatusRequest
+import com.teamsparta.courseregistration.domain.courseApplication.dto.ApplyCourseRequest
+import com.teamsparta.courseregistration.domain.courseApplication.dto.CourseApplicationResponse
+import com.teamsparta.courseregistration.domain.courseApplication.dto.UpdateApplicationStatusRequest
 import com.teamsparta.courseregistration.domain.lecture.dto.AddLectureRequest
 import com.teamsparta.courseregistration.domain.lecture.dto.LectureResponse
 import com.teamsparta.courseregistration.domain.lecture.dto.UpdateLectureRequest

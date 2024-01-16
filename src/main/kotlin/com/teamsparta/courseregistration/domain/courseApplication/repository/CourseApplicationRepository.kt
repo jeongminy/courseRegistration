@@ -1,6 +1,6 @@
-package com.teamsparta.courseregistration.domain.courseapplication.repository
+package com.teamsparta.courseregistration.domain.courseApplication.repository
 
-import com.teamsparta.courseregistration.domain.courseapplication.model.CourseApplication
+import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplication
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CourseApplicationRepository: JpaRepository<CourseApplication, Long> {

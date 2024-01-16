@@ -1,9 +1,8 @@
-package com.teamsparta.courseregistration.domain.courseapplication.model
+package com.teamsparta.courseregistration.domain.courseApplication.model
 
 import com.teamsparta.courseregistration.domain.course.model.Course
 import com.teamsparta.courseregistration.domain.course.model.toResponse
-import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplicationStatus
-import com.teamsparta.courseregistration.domain.courseapplication.dto.CourseApplicationResponse
+import com.teamsparta.courseregistration.domain.courseApplication.dto.CourseApplicationResponse
 import com.teamsparta.courseregistration.domain.user.model.User
 import com.teamsparta.courseregistration.domain.user.model.toResponse
 import jakarta.persistence.*

@@ -1,9 +1,9 @@
-package com.teamsparta.courseregistration.domain.courseapplication.controller
+package com.teamsparta.courseregistration.domain.courseApplication.controller
 
 import com.teamsparta.courseregistration.domain.course.service.CourseService
-import com.teamsparta.courseregistration.domain.courseapplication.dto.ApplyCourseRequest
-import com.teamsparta.courseregistration.domain.courseapplication.dto.CourseApplicationResponse
-import com.teamsparta.courseregistration.domain.courseapplication.dto.UpdateApplicationStatusRequest
+import com.teamsparta.courseregistration.domain.courseApplication.dto.ApplyCourseRequest
+import com.teamsparta.courseregistration.domain.courseApplication.dto.CourseApplicationResponse
+import com.teamsparta.courseregistration.domain.courseApplication.dto.UpdateApplicationStatusRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

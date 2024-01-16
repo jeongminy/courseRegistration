@@ -1,4 +1,4 @@
-package com.teamsparta.courseregistration.domain.courseapplication.dto
+package com.teamsparta.courseregistration.domain.courseApplication.dto
 
 data class ApplyCourseRequest(
     val userId: Long,

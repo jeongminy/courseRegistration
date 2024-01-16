@@ -7,13 +7,13 @@ import com.teamsparta.courseregistration.domain.course.model.Course
 import com.teamsparta.courseregistration.domain.course.model.CourseStatus
 import com.teamsparta.courseregistration.domain.course.model.toResponse
 import com.teamsparta.courseregistration.domain.course.repository.CourseRepository
+import com.teamsparta.courseregistration.domain.courseApplication.dto.ApplyCourseRequest
+import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplication
 import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplicationStatus
-import com.teamsparta.courseregistration.domain.courseapplication.dto.ApplyCourseRequest
-import com.teamsparta.courseregistration.domain.courseapplication.dto.CourseApplicationResponse
-import com.teamsparta.courseregistration.domain.courseapplication.dto.UpdateApplicationStatusRequest
-import com.teamsparta.courseregistration.domain.courseapplication.model.CourseApplication
-import com.teamsparta.courseregistration.domain.courseapplication.model.toResponse
-import com.teamsparta.courseregistration.domain.courseapplication.repository.CourseApplicationRepository
+import com.teamsparta.courseregistration.domain.courseApplication.model.toResponse
+import com.teamsparta.courseregistration.domain.courseApplication.repository.CourseApplicationRepository
+import com.teamsparta.courseregistration.domain.courseApplication.dto.CourseApplicationResponse
+import com.teamsparta.courseregistration.domain.courseApplication.dto.UpdateApplicationStatusRequest
 import com.teamsparta.courseregistration.domain.exception.ModelNotFoundException
 import com.teamsparta.courseregistration.domain.lecture.dto.AddLectureRequest
 import com.teamsparta.courseregistration.domain.lecture.dto.LectureResponse
@@ -22,6 +22,7 @@ import com.teamsparta.courseregistration.domain.lecture.model.Lecture
 import com.teamsparta.courseregistration.domain.lecture.model.toResponse
 import com.teamsparta.courseregistration.domain.lecture.repository.LectureRepository
 import com.teamsparta.courseregistration.domain.user.repository.UserRepository
+import com.teamsparta.courseregistration.infra.aop.StopWatch
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -38,6 +39,7 @@ class CourseServiceImpl(
         return courseRepository.findAll().map { it.toResponse() }
     }
 
+    @StopWatch
     override fun getCourseById(courseId: Long): CourseResponse {
         val course = courseRepository.findByIdOrNull(courseId) ?: throw ModelNotFoundException("Course", courseId)
         return course.toResponse()

@@ -1,4 +1,4 @@
-package com.teamsparta.courseregistration.domain.courseapplication.dto
+package com.teamsparta.courseregistration.domain.courseApplication.dto
 
 import com.teamsparta.courseregistration.domain.course.dto.CourseResponse
 import com.teamsparta.courseregistration.domain.user.dto.UserResponse

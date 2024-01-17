@@ -6,6 +6,9 @@ import com.teamsparta.courseregistration.domain.course.dto.UpdateCourseRequest
 import com.teamsparta.courseregistration.domain.course.service.CourseService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PostAuthorize
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,13 +24,15 @@ class CourseController(
     private val courseService: CourseService // CourseService 인터페이스를 생성자를 통해 주입받습니다.
 ) {
 
-    @GetMapping()
+    @GetMapping
+    @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
     fun getCourseList(): ResponseEntity<List<CourseResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK) // Get의 경우 성공하면 200을 리턴
             .body(courseService.getAllCourseList()) // getAllCourseList()함수는 List<CourseResponse>를 리턴함. -> body로 DTO가 담김
     }
 
+    @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
     @GetMapping("/{courseId}") // 만약 위에 RequestMapping이 되어있지 않다면 /courses/{courseId} 로 입력해주어야함
     fun getCourse(@PathVariable courseId: Long): ResponseEntity<CourseResponse> { // 보통 메소드의 인자를 getMapping의 인자와 일치해줌
         return ResponseEntity
@@ -35,6 +40,7 @@ class CourseController(
             .body(courseService.getCourseById(courseId))
     }
 
+    @PreAuthorize("hasRole('TUTOR')")
     @PostMapping
     fun createCourse(@RequestBody createCourseRequest: CreateCourseRequest): ResponseEntity<CourseResponse> { // CreatCourseRequest로 Jason을 맵핑해야 하기 때문에
         return ResponseEntity
@@ -42,6 +48,7 @@ class CourseController(
             .body(courseService.createCourse(createCourseRequest))
     }
 
+    @PreAuthorize("hasRole('TUTOR')")
     @PutMapping("/{courseId}")
     fun updateCourse(
         @PathVariable courseId: Long,
@@ -52,6 +59,7 @@ class CourseController(
             .body(courseService.updateCourse(courseId, updateCourseRequest))
     }
 
+    @PreAuthorize("hasRole('TUTOR')")
     @DeleteMapping("/{courseId}")
     fun deleteCourse(@PathVariable courseId: Long): ResponseEntity<Unit> { // Unit은 아무것도 리턴하지 않는다.
         courseService.deleteCourse(courseId)

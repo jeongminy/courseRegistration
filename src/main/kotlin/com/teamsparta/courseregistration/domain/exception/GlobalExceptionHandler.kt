@@ -1,6 +1,7 @@
 package com.teamsparta.courseregistration.domain.exception
 
 import com.teamsparta.courseregistration.domain.exception.dto.ErrorResponse
+import com.teamsparta.courseregistration.domain.user.exception.InvalidCredentialException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -20,6 +21,13 @@ class GlobalExceptionHandler { // 한 곳에서 전역적으로 예외(Exception
     fun handleIllegalStateException(e: IllegalStateException): ResponseEntity<ErrorResponse> {
         return ResponseEntity
             .status(HttpStatus.CONFLICT)
+            .body(ErrorResponse(e.message))
+    }
+
+    @ExceptionHandler(InvalidCredentialException::class)
+    fun handleInvalidCredentialException(e: InvalidCredentialException): ResponseEntity<ErrorResponse>{
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
             .body(ErrorResponse(e.message))
     }
 

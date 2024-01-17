@@ -1,8 +1,6 @@
 package com.teamsparta.courseregistration.domain.user.controller
 
-import com.teamsparta.courseregistration.domain.user.dto.SignUpRequest
-import com.teamsparta.courseregistration.domain.user.dto.UpdateUserProfileRequest
-import com.teamsparta.courseregistration.domain.user.dto.UserResponse
+import com.teamsparta.courseregistration.domain.user.dto.*
 import com.teamsparta.courseregistration.domain.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(
     private val userService: UserService
 ) {
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userService.login(loginRequest))
+    }
 
     @PostMapping("/signup")
     fun signUp(@RequestBody signUpRequest: SignUpRequest): ResponseEntity<UserResponse> {

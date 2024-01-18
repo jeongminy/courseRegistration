@@ -7,6 +7,7 @@ import com.teamsparta.courseregistration.domain.course.model.Course
 import com.teamsparta.courseregistration.domain.course.model.CourseStatus
 import com.teamsparta.courseregistration.domain.course.model.toResponse
 import com.teamsparta.courseregistration.domain.course.repository.CourseRepository
+import com.teamsparta.courseregistration.domain.course.repository.CourseRepositoryImpl
 import com.teamsparta.courseregistration.domain.courseApplication.dto.ApplyCourseRequest
 import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplication
 import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplicationStatus
@@ -35,8 +36,13 @@ class CourseServiceImpl(
     private val courseApplicationRepository: CourseApplicationRepository,
     private val userRepository: UserRepository,
 ) : CourseService {
+
     override fun getAllCourseList(): List<CourseResponse> {
         return courseRepository.findAll().map { it.toResponse() }
+    }
+
+    override fun searchCourseList(title: String): List<CourseResponse>? {
+        return courseRepository.searchCourseListByTitle(title).map {it.toResponse()}
     }
 
     @StopWatch

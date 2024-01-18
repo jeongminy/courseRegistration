@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/courses") // "/courses" 경로로 들어오는 모든 요청을 이 컨트롤러가 처리한다. // Handler Mapping에게 어떤 url을 담당하는지 알려줘야 해.
@@ -23,6 +24,18 @@ import org.springframework.web.bind.annotation.RestController
 class CourseController(
     private val courseService: CourseService // CourseService 인터페이스를 생성자를 통해 주입받습니다.
 ) {
+
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
+    fun searchCourseList(@RequestParam(value = "title") title: String): ResponseEntity<List<CourseResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(courseService.searchCourseList(title))
+    }
+
+
+
+
 
     @GetMapping
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")

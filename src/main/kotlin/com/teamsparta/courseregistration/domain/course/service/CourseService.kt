@@ -55,6 +55,8 @@ interface CourseService {
         request: UpdateApplicationStatusRequest
     ): CourseApplicationResponse
 
+    abstract fun searchCourseList(title: String): List<CourseResponse>?
+
 }
 
 // CourseService.kt

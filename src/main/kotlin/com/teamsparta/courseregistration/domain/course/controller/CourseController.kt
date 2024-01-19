@@ -34,9 +34,6 @@ class CourseController(
     }
 
 
-
-
-
     @GetMapping
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
     fun getCourseList(): ResponseEntity<List<CourseResponse>> {

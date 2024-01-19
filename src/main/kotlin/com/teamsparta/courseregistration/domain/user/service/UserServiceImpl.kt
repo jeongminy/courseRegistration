@@ -48,7 +48,7 @@ class UserServiceImpl(
                 email = request.email,
                 password = passwordEncoder.encode(request.password),//비밀번호 암호화
                 profile = Profile(
-                    nickname = request.nickname
+                nickname = request.nickname
                 ),
                 role = when (request.role) {
                     UserRole.STUDENT.name -> UserRole.STUDENT

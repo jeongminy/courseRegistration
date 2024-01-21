@@ -1,6 +1,10 @@
 package com.teamsparta.courseregistration.domain.course.repository
 
 import com.querydsl.core.BooleanBuilder
+import com.querydsl.core.types.Expression
+import com.querydsl.core.types.Order
+import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.PathBuilder
 import com.teamsparta.courseregistration.domain.course.model.Course
 import com.teamsparta.courseregistration.domain.course.model.CourseStatus
 import com.teamsparta.courseregistration.domain.course.model.QCourse
@@ -30,24 +34,46 @@ class CourseRepositoryImpl: QueryDslSupport(), CustomCourseRepository {
 
         val totalCount = queryFactory.select(course.count()).from(course).where(whereClause).fetchOne()?:0L
 
-        val query = queryFactory.selectFrom(course)
+//        val query = queryFactory.selectFrom(course)
+//            .where(whereClause)
+//            .offset(pageable.offset)
+//            .limit(pageable.pageSize.toLong())
+//
+//        if (pageable.sort.isSorted) {
+//
+//            when(pageable.sort.first()?.property) {
+//                "id" -> query.orderBy(course.id.asc())
+//                "title" -> query.orderBy(course.title.asc())
+//                else -> query.orderBy(course.id.asc())
+//            }
+//        } else {
+//            query.orderBy(course.id.asc())
+//        }
+
+        val contents = queryFactory.selectFrom(course)
             .where(whereClause)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-
-        if (pageable.sort.isSorted) {
-
-            when(pageable.sort.first()?.property) {
-                "id" -> query.orderBy(course.id.asc())
-                "title" -> query.orderBy(course.title.asc())
-                else -> query.orderBy(course.id.asc())
-            }
-        } else {
-            query.orderBy(course.id.asc())
-        }
-
-        val contents = query.fetch()
+            .orderBy(*getOrderSpecifier(pageable))
+            .fetch()
 
         return PageImpl(contents, pageable, totalCount)
     }
+
+    private fun getOrderSpecifier(pageable: Pageable): Array<OrderSpecifier<*>> {
+        val pathBuilder = PathBuilder(course.type, course.metadata)
+
+        return pageable.sort.toList().map {
+            order -> OrderSpecifier(
+                if (order.isAscending) Order.ASC else Order.DESC,
+                pathBuilder.get(order.property) as Expression<Comparable<*>>
+            )
+        }.toTypedArray()
+    }
+
+
+
+
+
+
 }

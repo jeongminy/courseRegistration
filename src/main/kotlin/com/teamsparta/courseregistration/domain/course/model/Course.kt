@@ -3,6 +3,7 @@ package com.teamsparta.courseregistration.domain.course.model
 import com.teamsparta.courseregistration.domain.course.dto.CourseResponse
 import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplication
 import com.teamsparta.courseregistration.domain.lecture.model.Lecture
+import com.teamsparta.courseregistration.domain.lecture.model.toResponse
 import jakarta.persistence.*
 
 @Entity // Table과 매핑되는 객체다 !! 하고 JPA에게 알려줌
@@ -85,6 +86,7 @@ fun Course.toResponse(): CourseResponse {
         description = description,
         status = status.name,
         maxApplicants = maxApplicants,
-        numApplicants = numApplicants
+        numApplicants = numApplicants,
+        lectures = lectures.map{it.toResponse()}
     )
 }

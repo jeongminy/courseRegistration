@@ -4,16 +4,18 @@ import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.EntityPathBase
 import com.querydsl.core.types.dsl.PathBuilder
 import com.teamsparta.courseregistration.domain.course.model.Course
 import com.teamsparta.courseregistration.domain.course.model.CourseStatus
 import com.teamsparta.courseregistration.domain.course.model.QCourse
+import com.teamsparta.courseregistration.domain.lecture.model.QLecture
 import com.teamsparta.courseregistration.infra.querydsl.QueryDslSupport
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
-import javax.swing.text.html.HTML.Tag.I
+
 
 
 @Repository
@@ -50,18 +52,20 @@ class CourseRepositoryImpl: QueryDslSupport(), CustomCourseRepository {
 //            query.orderBy(course.id.asc())
 //        }
 
+        val lecture = QLecture.lecture
         val contents = queryFactory.selectFrom(course)
             .where(whereClause)
+            .leftJoin(course.lectures, lecture)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-            .orderBy(*getOrderSpecifier(pageable))
+            .orderBy(*getOrderSpecifier(pageable, course))
             .fetch()
 
         return PageImpl(contents, pageable, totalCount)
     }
 
-    private fun getOrderSpecifier(pageable: Pageable): Array<OrderSpecifier<*>> {
-        val pathBuilder = PathBuilder(course.type, course.metadata)
+    private fun getOrderSpecifier(pageable: Pageable, path: EntityPathBase<*>): Array<OrderSpecifier<*>> {
+        val pathBuilder = PathBuilder(path.type, path.metadata)
 
         return pageable.sort.toList().map {
             order -> OrderSpecifier(

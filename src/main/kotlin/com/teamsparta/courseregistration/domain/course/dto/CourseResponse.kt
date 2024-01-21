@@ -1,5 +1,7 @@
 package com.teamsparta.courseregistration.domain.course.dto
 
+import com.teamsparta.courseregistration.domain.lecture.dto.LectureResponse
+
 data class CourseResponse(
     val id: Long, // 단순히 데이터의 전달용이기 때문에 구지 변경 가능할 필요는 없기 때문에 수정불가능하게 val //Long으로 한 이유는 아이디를 더 길게 쓸수있게
     val title: String, // Course의 제목
@@ -7,6 +9,7 @@ data class CourseResponse(
     val status: String, // 마감상태
     val maxApplicants: Int, // 신청 가능 인원(30명)
     val numApplicants: Int, // 현재 신청 인원
+    val lectures: List<LectureResponse>
 )
 
 // 왜 데이터클래스(DTO)로 작성했을까?

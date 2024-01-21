@@ -4,10 +4,11 @@ import com.teamsparta.courseregistration.domain.course.dto.CourseResponse
 import com.teamsparta.courseregistration.domain.course.dto.CreateCourseRequest
 import com.teamsparta.courseregistration.domain.course.dto.UpdateCourseRequest
 import com.teamsparta.courseregistration.domain.course.service.CourseService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.annotation.Secured
-import org.springframework.security.access.prepost.PostAuthorize
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+
 
 @RequestMapping("/courses") // "/courses" 경로로 들어오는 모든 요청을 이 컨트롤러가 처리한다. // Handler Mapping에게 어떤 url을 담당하는지 알려줘야 해.
 @RestController // @RestController 어노테이션으로 이 클래스가 REST API 컨트롤러임을 선언합니다.
@@ -36,10 +38,21 @@ class CourseController(
 
     @GetMapping
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
-    fun getCourseList(): ResponseEntity<List<CourseResponse>> {
+    fun getCourseList(
+        @PageableDefault(
+            size=15,
+            sort = ["id"]
+        ) pageable:Pageable,
+        @RequestParam(value = "status", required = false) status: String?
+    ): ResponseEntity<Page<CourseResponse>> {
+
+//        assert(pageable.sort.first()?.property == "id")
+//        assert(pageable.sort.isSorted) //정렬 기준이 있는지 확인하고 싶다면 isSorted 이용
+
         return ResponseEntity
             .status(HttpStatus.OK) // Get의 경우 성공하면 200을 리턴
-            .body(courseService.getAllCourseList()) // getAllCourseList()함수는 List<CourseResponse>를 리턴함. -> body로 DTO가 담김
+            .body(courseService.getPaginatedCourseList(pageable, status))
+//            .body(courseService.getAllCourseList()) // getAllCourseList()함수는 List<CourseResponse>를 리턴함. -> body로 DTO가 담김
     }
 
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")

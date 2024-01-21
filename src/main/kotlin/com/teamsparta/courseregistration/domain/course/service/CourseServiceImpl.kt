@@ -7,7 +7,6 @@ import com.teamsparta.courseregistration.domain.course.model.Course
 import com.teamsparta.courseregistration.domain.course.model.CourseStatus
 import com.teamsparta.courseregistration.domain.course.model.toResponse
 import com.teamsparta.courseregistration.domain.course.repository.CourseRepository
-import com.teamsparta.courseregistration.domain.course.repository.CourseRepositoryImpl
 import com.teamsparta.courseregistration.domain.courseApplication.dto.ApplyCourseRequest
 import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplication
 import com.teamsparta.courseregistration.domain.courseApplication.model.CourseApplicationStatus
@@ -24,6 +23,8 @@ import com.teamsparta.courseregistration.domain.lecture.model.toResponse
 import com.teamsparta.courseregistration.domain.lecture.repository.LectureRepository
 import com.teamsparta.courseregistration.domain.user.repository.UserRepository
 import com.teamsparta.courseregistration.infra.aop.StopWatch
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -36,6 +37,17 @@ class CourseServiceImpl(
     private val courseApplicationRepository: CourseApplicationRepository,
     private val userRepository: UserRepository,
 ) : CourseService {
+
+    override fun getPaginatedCourseList(pageable: Pageable, status: String?): Page<CourseResponse>? {
+        val courseStatus = when (status){
+            "OPEN" -> CourseStatus.OPEN
+            "CLOSED" -> CourseStatus.CLOSED
+            null -> null
+            else -> throw IllegalArgumentException("The status is invalied")
+        }
+
+        return courseRepository.findByPageableAndStatus(pageable, courseStatus).map {it.toResponse()}
+    }
 
     override fun getAllCourseList(): List<CourseResponse> {
         return courseRepository.findAll().map { it.toResponse() }

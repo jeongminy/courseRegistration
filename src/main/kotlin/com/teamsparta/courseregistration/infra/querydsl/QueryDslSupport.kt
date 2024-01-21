@@ -10,7 +10,7 @@ abstract class QueryDslSupport {
     protected lateinit var entityManager: EntityManager
 
 
-    protected val queryFactiory: JPAQueryFactory
+    protected val queryFactory: JPAQueryFactory
         get() {
             return JPAQueryFactory(entityManager)
         }

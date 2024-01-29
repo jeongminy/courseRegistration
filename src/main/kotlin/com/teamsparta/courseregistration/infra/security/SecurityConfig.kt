@@ -12,7 +12,7 @@ import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //http관련 보안 기능을 설정 하기 위해
 @EnableMethodSecurity
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
@@ -22,6 +22,8 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
+        //filterChain 함수는 Spring Security에서 사용되는 SecurityFilterChain 객체를 생성하는 함수입니다.
+        //이 함수는 http라는 HttpSecurity 객체를 매개변수로 받아와서 SecurityFilterChain을 구성하고 반환합니다.
         return http
             .httpBasic { it.disable() } // BasicAuthenticationFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter 제외
             .formLogin { it.disable() } // UsernamePassworedAuthenticationFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter 제외

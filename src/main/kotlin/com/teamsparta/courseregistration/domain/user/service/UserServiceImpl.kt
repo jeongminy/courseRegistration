@@ -22,12 +22,15 @@ class UserServiceImpl(
 ): UserService {
 
     override fun login(request: LoginRequest): LoginResponse {
-        val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null) //이메일 체크
+        val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null) //확인사항1: 이메일이 DB에 있는지 확인한다.
 
-        if (user.role.name != request.role || !passwordEncoder.matches(request.password, user.password)) { //역할과 비밀번호 체크
-            throw InvalidCredentialException()
+        if (user.role.name != request.role || !passwordEncoder.matches(request.password, user.password)) {
+            //확인사항2: 역할이 일치하는지 확인
+            //확인사항3: 비밀번호가 일치하는지 확인
+            //passwordEncoder.matches() 메서드는 평문 비밀번호와 암호화된 비밀번호가 일치하는지를 확인하는 기능을 수행한다.
+            throw InvalidCredentialException() //역할과 비밀번호가 일치하지 않을 시, InvalidCredentialException 예외 발생
         }
-
+        //토큰을 생성하고 반환한다.
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
                 subject = user.id.toString(),

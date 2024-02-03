@@ -53,6 +53,11 @@ class CourseServiceImpl(
         return courseRepository.findAll().map { it.toResponse() }
     }
 
+//    QuerydslRepository를 CouseRepository와 합치게 되어 queryDslCourseRepository를 불러올 필요가 없어짐.
+//    override fun searchCourseList(title: String): List<CourseResponse> {
+//        return queryDslCourseRepository.searchCourseListByTitle(title).map {it.toResponse()}
+//    }
+
     override fun searchCourseList(title: String): List<CourseResponse>? {
         return courseRepository.searchCourseListByTitle(title).map {it.toResponse()}
     }

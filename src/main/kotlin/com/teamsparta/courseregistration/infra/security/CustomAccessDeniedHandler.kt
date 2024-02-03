@@ -16,7 +16,7 @@ class CustomAccessDeniedHandler: AccessDeniedHandler {
         response: HttpServletResponse,
         accessDeniedException: AccessDeniedException
     ) {
-        response.status = HttpServletResponse.SC_FORBIDDEN
+        response.status = HttpServletResponse.SC_FORBIDDEN //403
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.characterEncoding = "UTF-8"
 

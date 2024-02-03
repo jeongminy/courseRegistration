@@ -5,6 +5,7 @@ import com.teamsparta.courseregistration.domain.course.dto.CreateCourseRequest
 import com.teamsparta.courseregistration.domain.course.dto.UpdateCourseRequest
 import com.teamsparta.courseregistration.domain.course.service.CourseService
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
@@ -35,6 +36,33 @@ class CourseController(
             .body(courseService.searchCourseList(title))
     }
 
+//    //pageable을 붙이기만 해도 page, size, sort가 자동 부여됨
+//    @GetMapping
+//    @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
+//    fun getCourseList(pageable:Pageable): ResponseEntity<List<CourseResponse>> {
+//        return ResponseEntity
+//            .status(HttpStatus.OK) // Get의 경우 성공하면 200을 리턴
+//            .body(courseService.getAllCourseList())
+//    }
+
+
+//    //value를 사용해서 구현할 수 도 있어 (이런 방식도 있음)
+//    @GetMapping
+//    @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
+//    fun getCourseList(
+//        @RequestParam(value = "page") page: Int,
+//        @RequestParam(value = "size") size: Int,
+//        @RequestParam(value = "orderby") orderby: String
+//    ): ResponseEntity<List<CourseResponse>> {
+//
+//        PageRequest.of()
+//
+//        return ResponseEntity
+//            .status(HttpStatus.OK)  // Get의 경우 성공하면 200을 리턴
+//            .body(CourseService.getAllCourseList()) // getAllCourseList()함수는 List<CourseResponse>를 리턴함. -> body로 DTO가 담김
+//    }
+
+
 
     @GetMapping
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")
@@ -42,17 +70,17 @@ class CourseController(
         @PageableDefault(
             size=15,
             sort = ["id"]
-        ) pageable:Pageable,
+        ) pageable:Pageable, //pageable은 페이지 정보를 담고있는 하나의 객체 이다.
         @RequestParam(value = "status", required = false) status: String?
     ): ResponseEntity<Page<CourseResponse>> {
 
-//        assert(pageable.sort.first()?.property == "id")
+//        assert(pageable.sort.first()?.property == "id") //첫 번째 정렬(sort) 기준이 "id"인지를 검증하는 것을 의미
 //        assert(pageable.sort.isSorted) //정렬 기준이 있는지 확인하고 싶다면 isSorted 이용
 
         return ResponseEntity
-            .status(HttpStatus.OK) // Get의 경우 성공하면 200을 리턴
+            .status(HttpStatus.OK)
             .body(courseService.getPaginatedCourseList(pageable, status))
-//            .body(courseService.getAllCourseList()) // getAllCourseList()함수는 List<CourseResponse>를 리턴함. -> body로 DTO가 담김
+//            .body(courseService.getAllCourseList())
     }
 
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")

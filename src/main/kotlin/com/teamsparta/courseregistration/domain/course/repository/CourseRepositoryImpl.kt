@@ -18,14 +18,15 @@ import org.springframework.stereotype.Repository
 
 
 
-@Repository
+@Repository //외부기능을 활용하다 보니 Repository 어노테이션을 붙여 주어야 함. 그래야 spring Bean으로서 동작함.
 class CourseRepositoryImpl: QueryDslSupport(), CustomCourseRepository {
 
-    private val course = QCourse.course
+    private val course = QCourse.course //course 에 대한 QClass를 멤버 변수로 선언 해준다.
 
+    //title 기준으로 course를 조회함
     override fun searchCourseListByTitle(title: String): List<Course> {
         return queryFactory.selectFrom(course)
-            .where(course.title.containsIgnoreCase(title))
+            .where(course.title.containsIgnoreCase(title)) //containsIgnoreCase 는 대소문자 구분 하지 않고 검색해 줘서 좋음.
             .fetch()
     }
 
@@ -34,7 +35,7 @@ class CourseRepositoryImpl: QueryDslSupport(), CustomCourseRepository {
         val whereClause = BooleanBuilder()
         courseStatus?.let {whereClause.and(course.status.eq(courseStatus))}
 
-        val totalCount = queryFactory.select(course.count()).from(course).where(whereClause).fetchOne()?:0L
+        val totalCount = queryFactory.select(course.count()).from(course).where(whereClause).fetchOne() ?: 0L
 
 //        val query = queryFactory.selectFrom(course)
 //            .where(whereClause)
@@ -55,7 +56,8 @@ class CourseRepositoryImpl: QueryDslSupport(), CustomCourseRepository {
         val lecture = QLecture.lecture
         val contents = queryFactory.selectFrom(course)
             .where(whereClause)
-            .leftJoin(course.lectures, lecture)
+            .leftJoin(course.lectures, lecture) //성능 최적화를 위해 fetch join
+            .fetchJoin() //성능 최적화를 위해 fetch join
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .orderBy(*getOrderSpecifier(pageable, course))

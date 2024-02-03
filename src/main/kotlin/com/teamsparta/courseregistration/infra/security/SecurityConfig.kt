@@ -13,10 +13,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity //http관련 보안 기능을 설정 하기 위해
-@EnableMethodSecurity
+@EnableMethodSecurity //MethodSecurity를 활성화 한다.(MethodSecurity는 Spring Security가 제공하는 기능으로, 메서드 수준에서의 보안과 인가를 처리하는 기능입니다.)
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter, //토큰 인증을 하지 않는 사람은 filter를 통과 할 수 없도록 하기 위해 주입!
-    private val authenticationEntryPoint: AuthenticationEntryPoint,
+    private val authenticationEntryPoint: AuthenticationEntryPoint, //JWT 인증 실패시 발생할 수 있는 예외 처리를 위해 주입
     private val accessDeniedHandler: AccessDeniedHandler
 ) {
 
@@ -31,11 +31,12 @@ class SecurityConfig(
             .csrf { it.disable() } // CsrfFilter 제외
             .authorizeHttpRequests {
                 it.requestMatchers(
-                    "/login",
-                    "/signup",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                    "/login", //로그인 아무나 할거야
+                    "/signup", //회원가입 아무나 할거야
+                    "/swagger-ui/**", //Swagger 문을 열어줘
+                    "/v3/api-docs/**" //Swagger 문을 열어줘
                 ).permitAll() //해당 경로에 대해서는 모든 사용자에게 접근을 허용합니다. (인증하지 않아도 접근 가능)
+                    //.requestMatchers("/admin/**").hasRole("ADMIN")  관리자일 경우만 해당 경로로 접근 할수 있음 설정 (URL기반)
                     .anyRequest().authenticated() //anyRequest() 메서드는 나머지 모든 요청에 대해서 권한이 필요하다는 것을 의미
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -55,5 +56,4 @@ class SecurityConfig(
             }
             .build()
     }
-
 }

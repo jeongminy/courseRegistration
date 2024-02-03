@@ -80,7 +80,6 @@ class CourseController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(courseService.getPaginatedCourseList(pageable, status))
-//            .body(courseService.getAllCourseList())
     }
 
     @PreAuthorize("hasRole('TUTOR') or hasRole('STUDENT')")

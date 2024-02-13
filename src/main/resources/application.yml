@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
+    username: postgres.pbrgzvktsnaglyfjdmiv
+    password: MmdJMARQoECEIbIF
   jpa:
     properties:
       hibernate:
@@ -18,9 +22,8 @@ logging:
       springframework:
         security: debug
 
-
 auth:
   jwt:
     issuer: team.sparta.com
     secret: PO4c8z41Hia5gJG3oeuFJMRYBB4Ws4aZ
-    accessTokenExpirationHour: 168
+    accessTokenExpirationHour: 24

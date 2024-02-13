@@ -14,7 +14,7 @@ enum class CourseStatus {
         companion object {
         @JvmStatic
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-        fun pase(name: String?): CourseStatus? =
+        fun parse(name: String?): CourseStatus? =
             name?.let { EnumUtils.getEnumIgnoreCase(CourseStatus::class.java, it.trim())}
     }
 }
